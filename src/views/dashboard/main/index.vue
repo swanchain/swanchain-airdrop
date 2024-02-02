@@ -5,7 +5,7 @@
         <span>Reward History</span>
       </h1>
       <h2 class="font-20 weight-4">Connect your wallet to view the rewards you've earned in the Swan Network. <br />See a detailed history of your achievements and prizes.</h2>
-      <el-button round @click="claimShow=true">Click Query</el-button>
+      <el-button round @click="clickQuery">Click Query</el-button>
     </div>
 
     <!-- <ul class="media flex-row">
@@ -13,16 +13,11 @@
         <img :src="m.img" @click="system.$commonFun.goLink(m.link)" />
       </li>
     </ul> -->
-
-    <pop-ups v-if="claimShow && metaAddress === ''" :claimShow="claimShow" @hardClose="hardClose"></pop-ups>
-    <table-popups v-if="claimShow && metaAddress" :claimShow="claimShow" @hardClose="hardClose"></table-popups>
   </section>
 </template>
 
 <script>
 import { defineComponent, computed, onMounted, watch, ref, reactive, getCurrentInstance } from 'vue'
-import popUps from "@/components/popups"
-import tablePopups from "@/components/tablePopups"
 import { useStore } from "vuex"
 import { useRouter, useRoute } from 'vue-router'
 import {
@@ -31,16 +26,15 @@ import {
 import { ElButton } from "element-plus"
 export default defineComponent({
   components: {
-    CircleCheck, popUps, tablePopups, ElButton
+    CircleCheck, ElButton
   },
-  setup () {
+  setup (props, context) {
     const store = useStore()
     const bodyWidth = ref(document.body.clientWidth <= 768 ? 30 : 50)
     const metaAddress = computed(() => (store.state.metaAddress))
     const system = getCurrentInstance().appContext.config.globalProperties
     const route = useRoute()
     const router = useRouter()
-    const claimShow = ref(false)
     const mediaData = ref([
       {
         img: require('@/assets/images/media-01.png'),
@@ -60,17 +54,16 @@ export default defineComponent({
       }
     ])
 
-    function hardClose (dialog) {
-      claimShow.value = dialog
+    function clickQuery (dialog) {
+      context.emit('hardClose', true)
     }
     onMounted(() => { })
     return {
       system,
       metaAddress,
       bodyWidth,
-      claimShow,
-      hardClose,
-      mediaData
+      mediaData,
+      clickQuery
     }
   }
 })

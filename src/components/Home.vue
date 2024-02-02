@@ -2,11 +2,11 @@
   <div class="wrapper" id="wrapper" ref="area">
     <el-container>
       <el-header>
-        <v-head></v-head>
+        <v-head @hardClose="hardClose"></v-head>
       </el-header>
       <el-main>
         <div class="content">
-          <router-view v-slot="{ Component }">
+          <router-view v-slot="{ Component }" @hardClose="hardClose">
             <transition name="fade" mode="out-in">
               <keep-alive>
                 <component :is="Component" />
@@ -17,11 +17,16 @@
         </div>
       </el-main>
     </el-container>
+
+    <pop-ups v-if="claimShow && metaAddress === ''" :claimShow="claimShow" @hardClose="hardClose"></pop-ups>
+    <table-popups v-if="claimShow && metaAddress" :claimShow="claimShow" @hardClose="hardClose"></table-popups>
   </div>
 </template>
 
 <script>
-import vHead from './Header.vue';
+import vHead from './Header.vue'
+import popUps from "@/components/popups"
+import tablePopups from "@/components/tablePopups"
 import { defineComponent, computed, onMounted, watch, ref, reactive, getCurrentInstance } from 'vue'
 import { useStore } from "vuex"
 import { useRouter, useRoute } from 'vue-router'
@@ -31,14 +36,24 @@ export default defineComponent({
     const store = useStore()
     const bodyWidth = ref(document.body.clientWidth < 992)
     const system = getCurrentInstance().appContext.config.globalProperties
+    const metaAddress = computed(() => (store.state.metaAddress))
     const route = useRoute()
     const router = useRouter()
+    const claimShow = ref(false)
 
+    function hardClose (dialog) {
+      claimShow.value = dialog
+    }
     onMounted(() => { })
-    return {}
+    return {
+      system,
+      metaAddress,
+      claimShow,
+      hardClose
+    }
   },
   components: {
-    vHead, ElBacktop, ElContainer, ElHeader, ElMain
+    vHead, ElBacktop, ElContainer, ElHeader, ElMain, popUps, tablePopups
   }
 })
 </script>

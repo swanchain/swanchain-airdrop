@@ -103,7 +103,8 @@ export default defineComponent({
       const time = await throttle()
       if (!time) return false
       system.$commonFun.Init(async (addr, chain) => {
-        if (chain) spookyMethod()
+        // console.log(addr, chain)
+        // if (chain) spookyMethod()
       })
     }
 

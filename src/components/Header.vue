@@ -2,15 +2,26 @@
   <section id="container-header">
     <div class="header lang-max flex-row space-between font-14">
       <img :src="swanLogo" class="logo-img mit" alt='swan' @click="goMain" />
-      <el-button v-if="metaAddress === ''" round @click="claimShow=true">Log in</el-button>
+      <el-button v-if="metaAddress === ''" round @click="clickQuery">Log in</el-button>
       <div v-else class="wallet flex-row">
         <div class="address flex-row font-20">
           <img :src="metaLogo" alt="" class="image" />
           <div class="font-14">{{system.$commonFun.hiddAddress(metaAddress)}}</div>
         </div>
         <div class="connect flex-row font-14">
-          <span></span>
-          Connected
+          <el-dropdown @command="handleSelect" class="sign-popper" popper-class="menu-popper" placement="bottom" :teleported="true">
+            <div class="el-dropdown-link flex-row">
+              <span></span>
+              Connected
+            </div>
+            <template #dropdown>
+              <el-dropdown-menu>
+                <el-dropdown-item command="logout">
+                  <span class="font-16">Logout</span>
+                </el-dropdown-item>
+              </el-dropdown-menu>
+            </template>
+          </el-dropdown>
         </div>
       </div>
     </div>
@@ -21,10 +32,10 @@ import { defineComponent, computed, onMounted, onBeforeUnmount, nextTick, watch,
 import { useStore } from "vuex"
 import { useRouter, useRoute } from 'vue-router'
 // import {} from '@element-plus/icons-vue'
-import { ElButton } from "element-plus"
+import { ElButton, ElDropdown, ElDropdownItem, ElDropdownMenu } from "element-plus"
 export default defineComponent({
-  components: { ElButton },
-  setup () {
+  components: { ElButton, ElDropdown, ElDropdownItem, ElDropdownMenu },
+  setup (props, context) {
     const store = useStore()
     const bodyWidth = ref(document.body.clientWidth < 992)
     const metaAddress = computed(() => (store.state.metaAddress))
@@ -33,14 +44,37 @@ export default defineComponent({
     const router = useRouter()
     const swanLogo = require("@/assets/images/logo.png")
     const metaLogo = require("@/assets/images/metamask.png")
+    const prevType = ref(true)
 
-    onMounted(() => { })
+    async function handleSelect (key, keyPath) {
+      // console.log(key, keyPath) //  
+      switch (key) {
+        case 'logout':
+          store.dispatch('setMetaAddress', '')
+          break;
+      }
+    }
+    function clickQuery (dialog) {
+      context.emit('hardClose', true)
+    }
+    function fn () {
+      document.addEventListener('visibilitychange', function () {
+        prevType.value = !document.hidden
+      })
+      if (typeof window.ethereum === 'undefined') return
+      system.$commonFun.providerInit.on('chainChanged', async function (accounts) {
+        if (!prevType.value) return false
+        store.dispatch('setMetaAddress', '')
+      })
+    }
+    onMounted(() => fn())
     watch(route, (to, from) => { })
     return {
       system,
       swanLogo,
       metaLogo,
-      metaAddress
+      metaAddress,
+      clickQuery, handleSelect
     }
   }
 })
@@ -190,17 +224,43 @@ export default defineComponent({
         }
       }
       .connect {
-        padding: 9px 22px 9px 15px;
-        margin: 0 0 0 24px;
-        background-color: #717172;
-        border-radius: 50px;
-        span {
-          width: 10px;
-          height: 10px;
-          margin: 0 8px 0 0;
-          background-color: #0ff71a;
-          border-radius: 20px;
+        color: @white-color;
+        .el-dropdown {
+          .el-dropdown-link {
+            padding: 9px 22px 9px 15px;
+            margin: 0 0 0 24px;
+            background-color: #717172;
+            border-radius: 50px;
+            color: @white-color;
+            span {
+              width: 10px;
+              height: 10px;
+              margin: 0 8px 0 0;
+              background-color: #0ff71a;
+              border-radius: 20px;
+            }
+          }
         }
+        // .sign-popper {
+        //   * {
+        //     outline: none !important;
+        //   }
+        //   .el-dropdown-link {
+        //     padding: 4px;
+        //     color: @white-color;
+        //     background-color: @theme-color;
+        //     border-radius: 64px;
+        //     * {
+        //       cursor: pointer;
+        //     }
+        //     .width-icon {
+        //       fill: @white-color;
+        //     }
+        //     &:focus-visible {
+        //       outline: none !important;
+        //     }
+        //   }
+        // }
       }
     }
   }
