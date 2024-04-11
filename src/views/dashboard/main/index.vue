@@ -1,18 +1,19 @@
 <template>
   <section id="container-main">
     <div class="module lang-max text-center font-27">
-      <h1 class="font-68 font-bold">Check Your
-        <span>Reward History</span>
+      <h1 class="font-68 font-bold">
+        <span>SWAN CHAIN </span>
       </h1>
-      <h2 class="font-20 weight-4">Connect your wallet to view the rewards you've earned in the Swan Network. <br />See a detailed history of your achievements and prizes.</h2>
-      <el-button round @click="clickQuery">Click Query</el-button>
+      <h2 class="font-65 weight-4">THE DEPIN BUILT FOR AI</h2>
+      <h3 class="font-20 weight-4">Click below to claim your reward.</h3>
+      <el-button round @click="clickQuery">CLAIM</el-button>
     </div>
 
-    <!-- <ul class="media flex-row">
+    <ul class="media flex-row">
       <li v-for="m in mediaData" :key="m">
         <img :src="m.img" @click="system.$commonFun.goLink(m.link)" />
       </li>
-    </ul> -->
+    </ul>
   </section>
 </template>
 
@@ -76,7 +77,7 @@ export default defineComponent({
   font-size: 18px;
   letter-spacing: 1px;
   word-break: break-word;
-  line-height: 1;
+  line-height: 1.1;
   .media {
     position: absolute;
     right: 80px;
@@ -104,8 +105,8 @@ export default defineComponent({
         color: @theme-color;
       }
     }
-    h2 {
-      padding: 22px 0 35px;
+    h3 {
+      padding: 22px 0 15px;
       line-height: 1.5;
     }
     .el-button {

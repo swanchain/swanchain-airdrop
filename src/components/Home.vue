@@ -101,7 +101,8 @@ export default defineComponent({
       left: 0;
       right: 0;
       z-index: 99;
-      background-color: #0f1010;
+      font-family: "Gilroy-Medium";
+      // background-color: #0f1010;
     }
   }
 }

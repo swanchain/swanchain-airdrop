@@ -7,16 +7,16 @@
         </el-icon>
       </div>
       <div class="connect-wallet" v-if="active === 'connect'">
-        <div class="title font-16 font-bold text-center">Connect Wallet</div>
+        <div class="title font-16 font-bold">Connect Wallet</div>
         <div class="metamask flex-row" @click="isLogin">
           <img :src="metaLogo" alt="" class="image" />
           <div class="font-14">MetaMask</div>
         </div>
-        <div class="agree text-center font-12">
+        <!-- <div class="agree text-center font-12">
           By connecting your wallet, you agree to our<br />
           <a>Terms of Service</a> and
           <a>Privacy Policy</a>
-        </div>
+        </div> -->
       </div>
 
       <div class="connect-result flex-row" v-else-if="active === 'failed'">
@@ -168,7 +168,7 @@ export default defineComponent({
     padding: 0;
     background-color: #30333d;
     border: 2px solid #3259a8;
-    border-radius: 25px;
+    border-radius: 8px;
     @media screen and (max-width: 1260px) {
       width: 25%;
     }
@@ -225,9 +225,9 @@ export default defineComponent({
         padding: 90px 0 45px;
       }
       .title {
-        padding: 0 0 20px;
+        padding: 0 20px;
         font-weight: 600;
-        border-bottom: 1px solid #64666e;
+        // border-bottom: 1px solid #64666e;
         @media screen and (max-width: 992px) {
           padding: 0 0 22px;
         }
@@ -240,7 +240,7 @@ export default defineComponent({
         padding: 11px 20px;
         margin: 20px 15px;
         background-color: #1c1d22;
-        border-radius: 10px;
+        border-radius: 8px;
         cursor: pointer;
         @media screen and (max-width: 992px) {
           padding: 33px 49px;

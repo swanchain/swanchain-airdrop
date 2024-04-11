@@ -6,8 +6,15 @@
 }
 
 @font-face {
-    font-family: 'Montserrat-Bold';
-    src: url(../font/Montserrat-Bold.ttf);
+    font-family: 'Montserrat-Medium';
+    src: url(../font/Montserrat-Medium.ttf);
+    font-style: normal;
+    font-display: block;
+}
+
+@font-face {
+    font-family: 'Montserrat-ExtraBold';
+    src: url(../font/Montserrat-ExtraBold.ttf);
     font-style: normal;
     font-display: block;
 }
@@ -68,7 +75,7 @@ body {
     background: #090909 url(../images/background-image.jpg) no-repeat center top;
     background-size: cover;
     font-family: 'Helvetica Neue', Helvetica, 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', '微软雅黑', Arial, sans-serif;
-    font-family: 'Gilroy-Medium';
+    font-family: 'Montserrat-Medium';
 }
 
 table {

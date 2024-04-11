@@ -489,7 +489,7 @@ export default {
   font-family: "Montserrat-Black";
 }
 .font-bold {
-  font-family: "Montserrat-Bold";
+  font-family: 'Montserrat-ExtraBold';
 }
 
 .text-center {
