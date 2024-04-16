@@ -102,19 +102,15 @@ async function Init(callback) {
           return false
         }
 
-        // const chainNet = await walletChain()
-        // const chainId = await web3Init.eth.net.getId()
-        // console.log('chainId:', chainId)
-        // if (chainId !== 2024) {
-        //   return
-        // }
+        const chainNet = await walletChain()
+        const chainId = await web3Init.eth.net.getId()
         await web3Init.eth.getAccounts().then(async webAccounts => {
             store.dispatch('setMetaAddress', webAccounts[0])
-            callback(webAccounts[0])
+            callback(webAccounts[0], chainId === Number(process.env.VUE_APP_CHAINID))
           })
           .catch(async (error) => {
             store.dispatch('setMetaAddress', accounts[0])
-            callback(accounts[0])
+            callback(accounts[0], chainId === Number(process.env.VUE_APP_CHAINID))
           })
       })
       .catch((error) => {

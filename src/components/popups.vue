@@ -3,14 +3,14 @@
     <div class="connect-area">
       <div class="close" @click="closeHandle">
         <el-icon>
-          <Close />
+          <CircleClose />
         </el-icon>
       </div>
       <div class="connect-wallet" v-if="active === 'connect'">
-        <div class="title font-16 font-bold">Connect Wallet</div>
+        <div class="title font-24 weight-6">Connect Wallet</div>
         <div class="metamask flex-row" @click="isLogin">
           <img :src="metaLogo" alt="" class="image" />
-          <div class="font-14">MetaMask</div>
+          <div class="font-18">MetaMask</div>
         </div>
         <!-- <div class="agree text-center font-12">
           By connecting your wallet, you agree to our<br />
@@ -23,7 +23,7 @@
         <div class="image"><img :src="promptFailed" alt="" class="image" /></div>
         <div class="content">
           <div class="title failed font-29">FAILED</div>
-          <div class="font-22">You are not eligible for rewards currently. Please stay tuned for upcoming activities.</div>
+          <div class="font-18">You are not eligible for rewards currently. Please stay tuned for upcoming activities.</div>
         </div>
       </div>
 
@@ -31,7 +31,7 @@
         <div class="image"><img :src="promptSuccess" alt="" class="image" /></div>
         <div class="content">
           <div class="title success font-29">SUCCESSFUL</div>
-          <div class="font-22">Reward successfully claimed! Check your NFT on
+          <div class="font-18">Reward successfully claimed! Check your NFT on
             <span @click="system.$commonFun.goLink(hash)">OpenSea</span>
           </div>
         </div>
@@ -57,21 +57,22 @@ import {
 import { useStore } from "vuex"
 import { useRouter, useRoute } from 'vue-router'
 import {
-  Close
+  CircleClose
 } from '@element-plus/icons-vue'
 import { ElIcon } from "element-plus"
 import { showLoading, hideLoading } from '@/plugins/loading'
-import spookyABI from '@/utils/abi/SpookyProxy.json'
+import claimABI from '@/utils/abi/ClaimNFT.json'
 export default defineComponent({
   name: 'Popup',
   components: {
-    Close, ElIcon
+    CircleClose, ElIcon
   },
   props: {
     claimShow: { type: Boolean, default: false }
   },
   setup (props, context) {
     const store = useStore()
+    const metaAddress = computed(() => (store.state.metaAddress))
     const bodyWidth = ref(document.body.clientWidth <= 768 ? 30 : 50)
     const system = getCurrentInstance().appContext.config.globalProperties
     const route = useRoute()
@@ -80,11 +81,10 @@ export default defineComponent({
     const promptSuccess = require("@/assets/images/prompt-success.png")
     const promptFailed = require("@/assets/images/prompt-failed.png")
     const active = ref('connect')
-    const spookyLoad = ref(false)
+    const claimLoad = ref(false)
     const hash = ref('')
-    const tokenID = Number(process.env.VUE_APP_TOKENID)
-    const spookyAddress = process.env.VUE_APP_CONTACT_ADDRESS
-    const spookyContract = new system.$commonFun.web3Init.eth.Contract(spookyABI, spookyAddress)
+    const claimAddress = process.env.VUE_APP_CONTACT_ADDRESS
+    const claimContract = new system.$commonFun.web3Init.eth.Contract(claimABI, claimAddress)
 
     function closeHandle () {
       context.emit('hardClose', false)
@@ -104,20 +104,20 @@ export default defineComponent({
       if (!time) return false
       system.$commonFun.Init(async (addr, chain) => {
         // console.log(addr, chain)
-        // if (chain) spookyMethod()
+        if (chain) claimMethod()
       })
     }
 
-    async function spookyMethod () {
+    async function claimMethod () {
       showLoading()
       try {
-        let gasLimit = await spookyContract.methods
-          .claim(tokenID)
-          .estimateGas({ from: store.state.metaAddress })
+        let gasLimit = await claimContract.methods
+          .claim()
+          .estimateGas({ from: metaAddress.value })
 
-        const tx = await spookyContract.methods
-          .claim(tokenID)
-          .send({ from: store.state.metaAddress, gasLimit: gasLimit })
+        const tx = await claimContract.methods
+          .claim()
+          .send({ from: metaAddress.value, gasLimit: gasLimit })
           .on('transactionHash', async (transactionHash) => {
             console.log('transactionHash:', transactionHash)
             hash.value = `${process.env.VUE_APP_POLYGONBLOCKURL}/tx/${transactionHash}`
@@ -132,7 +132,12 @@ export default defineComponent({
         hideLoading()
       }
     }
-    onMounted(() => { })
+    onMounted(() => {
+      if (metaAddress.value) {
+        active.value = ''
+        claimMethod()
+      } else active.value = 'connect'
+    })
     return {
       system,
       bodyWidth,
@@ -140,7 +145,7 @@ export default defineComponent({
       metaLogo,
       active,
       hash,
-      spookyLoad,
+      claimLoad,
       promptSuccess,
       promptFailed,
       closeHandle, isLogin
@@ -164,56 +169,57 @@ export default defineComponent({
   transition: all 0.2s;
   .connect-area {
     position: relative;
-    width: 20%;
-    padding: 0;
+    width: calc(29% - 56px);
+    min-height: 140px;
+    padding: 0 14px;
     background-color: #30333d;
     border: 2px solid #3259a8;
     border-radius: 8px;
     @media screen and (max-width: 1260px) {
-      width: 25%;
+      width: 35%;
     }
     @media screen and (max-width: 768px) {
-      width: 40%;
+      width: 50%;
       border-radius: 20px;
     }
     @media screen and (max-width: 600px) {
-      width: 60%;
+      width: 70%;
       border-radius: 30px;
     }
     @media screen and (max-width: 540px) {
-      width: 70%;
+      width: 80%;
     }
     .close {
       position: absolute;
-      right: 20px;
-      top: 18px;
-      font-size: 20px;
-      color: @white-color;
+      right: 10px;
+      top: 10px;
+      font-size: 25px;
+      color: #4d7aff;
       cursor: pointer;
       z-index: 100;
       @media screen and (max-width: 1260px) {
-        font-size: 25px;
-      }
-      @media screen and (max-width: 1024px) {
         font-size: 30px;
       }
-      @media screen and (max-width: 992px) {
-        top: 23px;
-        right: 25px;
+      @media screen and (max-width: 1024px) {
         font-size: 35px;
       }
-      @media screen and (max-width: 768px) {
-        top: 28px;
-        right: 30px;
+      @media screen and (max-width: 992px) {
+        top: 15px;
+        right: 15px;
         font-size: 40px;
       }
+      @media screen and (max-width: 768px) {
+        top: 20px;
+        right: 20px;
+        font-size: 45px;
+      }
       @media screen and (max-width: 600px) {
-        top: 33px;
-        right: 35px;
-        font-size: 50px;
+        top: 25px;
+        right: 25px;
+        font-size: 55px;
       }
       @media screen and (max-width: 540px) {
-        font-size: 60px;
+        font-size: 65px;
       }
     }
     .connect-wallet {

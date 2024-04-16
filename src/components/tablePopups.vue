@@ -7,7 +7,7 @@
         </el-icon>
       </div>
       <div class="connect-wallet">
-        <el-table :data="tableData" border style="width: 100%">
+        <el-table :data="tableData" border style="width: 100%" max-height="250">
           <el-table-column prop="date">
             <template #header>
               <div class="font-22 weight-5">Date</div>
@@ -67,7 +67,6 @@ import {
 } from '@element-plus/icons-vue'
 import { ElIcon, ElTable, ElTableColumn } from "element-plus"
 import { showLoading, hideLoading } from '@/plugins/loading'
-import spookyABI from '@/utils/abi/SpookyProxy.json'
 export default defineComponent({
   name: 'Popup',
   components: {

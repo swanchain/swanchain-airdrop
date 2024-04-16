@@ -17,9 +17,9 @@
         </div>
       </el-main>
     </el-container>
-
-    <pop-ups v-if="claimShow && metaAddress === ''" :claimShow="claimShow" @hardClose="hardClose"></pop-ups>
-    <table-popups v-if="claimShow && metaAddress" :claimShow="claimShow" @hardClose="hardClose"></table-popups>
+ <!-- && metaAddress === '' -->
+    <pop-ups v-if="claimShow" :claimShow="claimShow" @hardClose="hardClose"></pop-ups>
+    <!-- <table-popups v-if="claimShow && metaAddress" :claimShow="claimShow" @hardClose="hardClose"></table-popups> -->
   </div>
 </template>
 
