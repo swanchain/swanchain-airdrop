@@ -81,31 +81,35 @@ export default defineComponent({
     const system = getCurrentInstance().appContext.config.globalProperties
     const route = useRoute()
     const router = useRouter()
-    const tableData = ref([
-      {
-        date: '2022.02.25',
-        campaign: 'Electron testnet',
-        amount: '',
-        detail: ''
-      },
-      {
-        date: '2022.02.25',
-        campaign: 'Electron testnet',
-        amount: '',
-        detail: ''
-      }
-    ])
+    const tableData = ref([])
+    const providersLoad = ref(false)
 
     function closeHandle () {
       context.emit('hardClose', false)
     }
+    async function init () {
+      showLoading()
+      providersLoad.value = true
+      const params = {}
 
-    onMounted(() => { })
+      const providerRes = await system.$commonFun.sendRequest(`${process.env.VUE_APP_BASEAPI}cp/cplist?${system.$Qs.stringify(params)}`, 'get')
+      if (providerRes && providerRes.status === 'success') tableData.value = providerRes.data.providers
+      else {
+        tableData.value = []
+        if (providerRes.message) system.$commonFun.messageTip('error', providerRes.message)
+      }
+      providersLoad.value = false
+      hideLoading()
+    }
+    onMounted(() => {
+      init()
+    })
     return {
       system,
       bodyWidth,
       props,
       tableData,
+      providersLoad,
       closeHandle
     }
   }

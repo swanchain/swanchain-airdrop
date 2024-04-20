@@ -17,9 +17,9 @@
         </div>
       </el-main>
     </el-container>
- <!-- && metaAddress === '' -->
-    <pop-ups v-if="claimShow" :claimShow="claimShow" @hardClose="hardClose"></pop-ups>
-    <!-- <table-popups v-if="claimShow && metaAddress" :claimShow="claimShow" @hardClose="hardClose"></table-popups> -->
+
+    <pop-ups v-if="claimShow && !claimListShow" :claimShow="claimShow" @hardClose="hardClose"></pop-ups>
+    <table-popups v-if="claimShow && metaAddress && claimListShow" :claimShow="claimShow" @hardClose="hardClose"></table-popups>
   </div>
 </template>
 
@@ -40,15 +40,18 @@ export default defineComponent({
     const route = useRoute()
     const router = useRouter()
     const claimShow = ref(false)
+    const claimListShow = ref(false)
 
-    function hardClose (dialog) {
+    function hardClose (dialog, listDialog) {
       claimShow.value = dialog
+      claimListShow.value = listDialog || false
     }
     onMounted(() => { })
     return {
       system,
       metaAddress,
       claimShow,
+      claimListShow,
       hardClose
     }
   },

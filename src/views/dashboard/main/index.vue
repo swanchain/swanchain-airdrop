@@ -56,7 +56,7 @@ export default defineComponent({
     ])
 
     function clickQuery (dialog) {
-      context.emit('hardClose', true)
+      context.emit('hardClose', true, metaAddress.value ? true : false)
     }
     onMounted(() => { })
     return {
