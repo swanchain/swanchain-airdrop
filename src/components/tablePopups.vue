@@ -8,20 +8,20 @@
       </div>
       <div class="connect-wallet">
         <el-table :data="tableData" border style="width: 100%" max-height="250">
-          <el-table-column prop="date">
+          <el-table-column prop="campaign_name">
             <template #header>
-              <div class="font-22 weight-5">Date</div>
+              <div class="font-22 weight-5">campaign name</div>
             </template>
             <template #default="scope">
-              <div class="font-16">{{scope.row.date}}</div>
+              <div class="font-16">{{scope.row.campaign_name}}</div>
             </template>
           </el-table-column>
-          <el-table-column prop="campaign">
+          <el-table-column prop="nft_image">
             <template #header>
-              <div class="font-22 weight-5">Campaign</div>
+              <div class="font-22 weight-5">NFT image</div>
             </template>
             <template #default="scope">
-              <div class="font-16">{{scope.row.campaign}}</div>
+              <div class="font-16">{{scope.row.nft_image}}</div>
             </template>
           </el-table-column>
           <el-table-column prop="amount">
@@ -32,12 +32,12 @@
               <div class="font-16">{{scope.row.amount}}</div>
             </template>
           </el-table-column>
-          <el-table-column prop="detail">
+          <el-table-column prop="wallet_address">
             <template #header>
-              <div class="font-22 weight-5">Rewards Details</div>
+              <div class="font-22 weight-5">wallet address</div>
             </template>
             <template #default="scope">
-              <div class="font-16">{{scope.row.detail}}</div>
+              <div class="font-16">{{scope.row.wallet_address}}</div>
             </template>
           </el-table-column>
         </el-table>
@@ -90,13 +90,11 @@ export default defineComponent({
     async function init () {
       showLoading()
       providersLoad.value = true
-      const params = {}
-
-      const providerRes = await system.$commonFun.sendRequest(`${process.env.VUE_APP_BASEAPI}cp/cplist?${system.$Qs.stringify(params)}`, 'get')
-      if (providerRes && providerRes.status === 'success') tableData.value = providerRes.data.providers
-      else {
+      try {
+        const providerRes = await system.$commonFun.sendRequest(`${process.env.VUE_APP_BASEAPI}reward_list/${store.state.metaAddress}`, 'get')
+        tableData.value = providerRes || []
+      } catch{
         tableData.value = []
-        if (providerRes.message) system.$commonFun.messageTip('error', providerRes.message)
       }
       providersLoad.value = false
       hideLoading()
@@ -193,6 +191,7 @@ export default defineComponent({
           }
           th {
             background-color: #5580e9;
+            text-transform: capitalize;
           }
           td {
             background-color: #30333d;
