@@ -142,12 +142,12 @@ export default defineComponent({
     :deep(.claim-content) {
       .el-button {
         height: auto;
-        padding: 16px 35px;
+        padding: 14px 35px;
         margin: 0 20px 0 0;
         background-color: @theme-color;
         font-family: inherit;
         font-size: inherit;
-        line-height: 1;
+        line-height: 1.1;
         color: @white-color;
         border-radius: 100px;
         transition: all 0.2s;
@@ -163,7 +163,7 @@ export default defineComponent({
         font-size: inherit;
         line-height: 1;
         .el-select__wrapper {
-          padding: 16px 35px;
+          padding: 14px 35px;
           font-family: inherit;
           font-size: inherit;
           border-radius: 100px;
@@ -172,10 +172,12 @@ export default defineComponent({
           .el-select__placeholder {
             position: relative;
             top: auto;
+            height: auto;
             transform: none;
             font-family: inherit;
             font-size: inherit;
             color: #447dff;
+            line-height: 1.1;
           }
           .el-select__caret {
             font-size: inherit;
