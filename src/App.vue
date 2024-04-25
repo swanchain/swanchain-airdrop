@@ -489,7 +489,7 @@ export default {
   font-family: "Montserrat-Black";
 }
 .font-bold {
-  font-family: 'Montserrat-ExtraBold';
+  font-family: "Montserrat-ExtraBold";
 }
 
 .text-center {
@@ -533,6 +533,20 @@ export default {
   }
   &.nowrap {
     flex-wrap: nowrap;
+  }
+}
+
+.claim-list {
+  border-radius: 12px !important;
+  .el-scrollbar {
+    border-radius: 12px;
+    .el-select-dropdown__item {
+      height: auto;
+      padding: 8px 24px;
+      font-family: inherit;
+      font-size: inherit;
+      line-height: 1.3;
+    }
   }
 }
 </style>

@@ -68,7 +68,8 @@ export default defineComponent({
     CircleClose, ElIcon
   },
   props: {
-    claimShow: { type: Boolean, default: false }
+    claimShow: { type: Boolean, default: false },
+    claimType: { type: String, default: 'Zealy' }
   },
   setup (props, context) {
     const store = useStore()
@@ -109,28 +110,79 @@ export default defineComponent({
     }
 
     async function claimMethod () {
+      let gasLimit,tx
       showLoading()
       try {
-        let gasLimit = await claimContract.methods
-          .claim()
-          .estimateGas({ from: metaAddress.value })
+        console.log(props.claimType)
+        switch (props.claimType) {
+          case 'Zealy':
+            gasLimit = await claimContract.methods
+              .claimOG()
+              .estimateGas({ from: metaAddress.value })
 
-        const tx = await claimContract.methods
-          .claim()
-          .send({ from: metaAddress.value, gasLimit: gasLimit })
-          .on('transactionHash', async (transactionHash) => {
-            console.log('transactionHash:', transactionHash)
-            hash.value = `${process.env.VUE_APP_POLYGONBLOCKURL}/tx/${transactionHash}`
-            active.value = 'success'
-            hideLoading()
-          })
-          .on('error', () => hideLoading())
+            tx = await claimContract.methods
+              .claimOG()
+              .send({ from: metaAddress.value, gasLimit: gasLimit })
+              .on('transactionHash', (transactionHash) => txHashMethod(transactionHash))
+              .on('error', () => hideLoading())
+            break;
+          case 'Galxe':
+            gasLimit = await claimContract.methods
+              .claimGalxe()
+              .estimateGas({ from: metaAddress.value })
+
+            tx = await claimContract.methods
+              .claimGalxe()
+              .send({ from: metaAddress.value, gasLimit: gasLimit })
+              .on('transactionHash', (transactionHash) => txHashMethod(transactionHash))
+              .on('error', () => hideLoading())
+            break;
+          case 'SAO':
+             gasLimit = await claimContract.methods
+              .claim()
+              .estimateGas({ from: metaAddress.value })
+
+             tx = await claimContract.methods
+              .claim()
+              .send({ from: metaAddress.value, gasLimit: gasLimit })
+              .on('transactionHash', (transactionHash) => txHashMethod(transactionHash))
+              .on('error', () => hideLoading())
+            break;
+          case 'AMA':
+             gasLimit = await claimContract.methods
+              .claimAMA()
+              .estimateGas({ from: metaAddress.value })
+
+             tx = await claimContract.methods
+              .claimAMA()
+              .send({ from: metaAddress.value, gasLimit: gasLimit })
+              .on('transactionHash', (transactionHash) => txHashMethod(transactionHash))
+              .on('error', () => hideLoading())
+            break;
+          case 'kol':
+            gasLimit = await claimContract.methods
+              .claim()
+              .estimateGas({ from: metaAddress.value })
+
+            tx = await claimContract.methods
+              .claim()
+              .send({ from: metaAddress.value, gasLimit: gasLimit })
+              .on('transactionHash', (transactionHash) => txHashMethod(transactionHash))
+              .on('error', () => hideLoading())
+            break;
+        }
       } catch (err) {
         console.log('err', err)
         if (err && err.message) system.$commonFun.messageTip('error', err.message)
         active.value = 'failed'
         hideLoading()
       }
+    }
+    function txHashMethod (transactionHash) {
+      console.log('transactionHash:', transactionHash)
+      hash.value = `${process.env.VUE_APP_POLYGONBLOCKURL}/tx/${transactionHash}`
+      active.value = 'success'
+      hideLoading()
     }
     onMounted(() => {
       if (metaAddress.value) {

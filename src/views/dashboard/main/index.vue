@@ -6,7 +6,12 @@
       </h1>
       <h2 class="font-65 weight-4">THE DEPIN BUILT FOR AI</h2>
       <h3 class="font-20 weight-4">Click below to claim your reward.</h3>
-      <el-button round @click="clickQuery">CLAIM</el-button>
+      <div class="flex-row center claim-content">
+        <el-button round @click="clickQuery">CLAIM</el-button>
+        <el-select v-model="saturnValue" placeholder=" " popper-class="claim-list font-18">
+          <el-option v-for="item in saturnOptions" :key="item.value" :label="item.label" :value="item.value" />
+        </el-select>
+      </div>
     </div>
 
     <ul class="media flex-row">
@@ -24,10 +29,10 @@ import { useRouter, useRoute } from 'vue-router'
 import {
   CircleCheck
 } from '@element-plus/icons-vue'
-import { ElButton } from "element-plus"
+import { ElButton, ElSelect, ElOption } from "element-plus"
 export default defineComponent({
   components: {
-    CircleCheck, ElButton
+    CircleCheck, ElButton, ElSelect, ElOption
   },
   setup (props, context) {
     const store = useStore()
@@ -54,9 +59,32 @@ export default defineComponent({
         link: process.env.VUE_APP_BASE_GITHUB_LINK
       }
     ])
+    const saturnValue = ref('Zealy')
+    const saturnOptions = ref([
+      {
+        value: 'Zealy',
+        label: 'Zealy saturn mission',
+      },
+      {
+        value: 'Galxe',
+        label: 'Galxe saturn testent',
+      },
+      {
+        value: 'SAO',
+        label: 'SWAN x SAO Partners',
+      },
+      {
+        value: 'AMA',
+        label: 'AMA saturn Winners',
+      },
+      {
+        value: 'kol',
+        label: 'SWAN saturn kol',
+      }
+    ])
 
     function clickQuery (dialog) {
-      context.emit('hardClose', true, metaAddress.value ? true : false)
+      context.emit('hardClose', true, metaAddress.value ? true : false, saturnValue.value)
     }
     onMounted(() => { })
     return {
@@ -64,6 +92,8 @@ export default defineComponent({
       metaAddress,
       bodyWidth,
       mediaData,
+      saturnValue,
+      saturnOptions,
       clickQuery
     }
   }
@@ -109,21 +139,50 @@ export default defineComponent({
       padding: 22px 0 15px;
       line-height: 1.5;
     }
-    .el-button {
-      height: auto;
-      padding: 17px 35px;
-      margin: 0 auto;
-      background-color: @theme-color;
-      font-family: inherit;
-      font-size: inherit;
-      line-height: 1;
-      color: @white-color;
-      border-radius: 100px;
-      transition: all 0.2s;
-      border: 0;
-      &:hover {
-        background-color: @white-color;
-        color: @theme-color;
+    :deep(.claim-content) {
+      .el-button {
+        height: auto;
+        padding: 16px 35px;
+        margin: 0 20px 0 0;
+        background-color: @theme-color;
+        font-family: inherit;
+        font-size: inherit;
+        line-height: 1;
+        color: @white-color;
+        border-radius: 100px;
+        transition: all 0.2s;
+        border: 0;
+        &:hover {
+          background-color: @white-color;
+          color: @theme-color;
+        }
+      }
+      .el-select {
+        width: auto;
+        font-family: inherit;
+        font-size: inherit;
+        line-height: 1;
+        .el-select__wrapper {
+          padding: 16px 35px;
+          font-family: inherit;
+          font-size: inherit;
+          border-radius: 100px;
+          transition: all 0.2s;
+          border: 0;
+          .el-select__placeholder {
+            position: relative;
+            top: auto;
+            transform: none;
+            font-family: inherit;
+            font-size: inherit;
+            color: #447dff;
+          }
+          .el-select__caret {
+            font-size: inherit;
+            font-weight: bolder;
+            color: #447dff;
+          }
+        }
       }
     }
   }
