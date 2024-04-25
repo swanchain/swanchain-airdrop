@@ -8,7 +8,7 @@
       <h3 class="font-20 weight-4">Click below to claim your reward.</h3>
       <div class="flex-row center claim-content">
         <el-button round @click="clickQuery">CLAIM</el-button>
-        <el-select v-model="saturnValue" placeholder=" " popper-class="claim-list font-18">
+        <el-select v-model="saturnValue" placeholder=" " class="font-20" popper-class="claim-list font-18">
           <el-option v-for="item in saturnOptions" :key="item.value" :label="item.label" :value="item.value" />
         </el-select>
       </div>
@@ -147,7 +147,7 @@ export default defineComponent({
         background-color: @theme-color;
         font-family: inherit;
         font-size: inherit;
-        line-height: 1.1;
+        line-height: 30px;
         color: @white-color;
         border-radius: 100px;
         transition: all 0.2s;
@@ -159,9 +159,6 @@ export default defineComponent({
       }
       .el-select {
         width: auto;
-        font-family: inherit;
-        font-size: inherit;
-        line-height: 1;
         .el-select__wrapper {
           padding: 14px 35px;
           font-family: inherit;
@@ -169,6 +166,7 @@ export default defineComponent({
           border-radius: 100px;
           transition: all 0.2s;
           border: 0;
+          line-height: 30px;
           .el-select__placeholder {
             position: relative;
             top: auto;
@@ -177,7 +175,7 @@ export default defineComponent({
             font-family: inherit;
             font-size: inherit;
             color: #447dff;
-            line-height: 1.1;
+            line-height: 30px;
           }
           .el-select__caret {
             font-size: inherit;
