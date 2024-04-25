@@ -160,7 +160,7 @@ export default defineComponent({
       .el-select {
         width: auto;
         .el-select__wrapper {
-          padding: 14px 35px;
+          padding: 14px 45px;
           font-family: inherit;
           font-size: inherit;
           border-radius: 100px;
@@ -178,6 +178,7 @@ export default defineComponent({
             line-height: 30px;
           }
           .el-select__caret {
+            margin: 0 0 0 10px;
             font-size: inherit;
             font-weight: bolder;
             color: #447dff;
