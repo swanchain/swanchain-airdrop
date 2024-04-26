@@ -8,9 +8,6 @@
       <h3 class="font-20 weight-4">Click below to claim your reward.</h3>
       <div class="flex-row center claim-content">
         <el-button round @click="clickQuery">CLAIM</el-button>
-        <el-select v-model="saturnValue" placeholder=" " class="font-20" popper-class="claim-list font-18">
-          <el-option v-for="item in saturnOptions" :key="item.value" :label="item.label" :value="item.value" />
-        </el-select>
       </div>
     </div>
 

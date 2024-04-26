@@ -189,7 +189,7 @@ export default defineComponent({
     onMounted(() => {
       if (metaAddress.value) {
         active.value = ''
-        claimMethod()
+        // claimMethod()
       } else active.value = 'connect'
     })
     return {

@@ -91,7 +91,7 @@ export default defineComponent({
       showLoading()
       providersLoad.value = true
       try {
-        const providerRes = await system.$commonFun.sendRequest(`${process.env.VUE_APP_BASEAPI}reward_list/${store.state.metaAddress}`, 'get')
+        const providerRes = await system.$commonFun.sendRequest(`${process.env.VUE_APP_BASEAPI}claim_reward_list/${store.state.metaAddress}`, 'get')
         tableData.value = providerRes && providerRes.length > 0 ? providerRes : []
       } catch{
         tableData.value = []
