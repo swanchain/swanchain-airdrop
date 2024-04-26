@@ -7,7 +7,7 @@
       <h2 class="font-65 weight-4">THE DEPIN BUILT FOR AI</h2>
       <h3 class="font-20 weight-4">Click below to claim your reward.</h3>
       <div class="flex-row center claim-content">
-        <el-button round @click="clickQuery">CLAIM</el-button>
+        <el-button round @click="clickQuery">check eligibility</el-button>
       </div>
     </div>
 
@@ -149,6 +149,7 @@ export default defineComponent({
         border-radius: 100px;
         transition: all 0.2s;
         border: 0;
+        text-transform: capitalize;
         &:hover {
           background-color: @white-color;
           color: @theme-color;
