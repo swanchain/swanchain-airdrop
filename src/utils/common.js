@@ -171,6 +171,34 @@ function hiddAddress(val) {
   else return '-'
 }
 
+function momentFun(dateItem) {
+  if (!dateItem) return null
+  const t = /^\d{10}$|^\d{13}$/.test(dateItem)
+  let dateNew = t ? dateItem.toString().length === 13 ? dateItem : dateItem * 1000 : new Date(dateItem).getTime()
+  let dataUnit = ''
+  let dataTime = new Date(dateNew) + ''
+  let dataUnitIndex = dataTime.indexOf('GMT')
+  let dataUnitArray = dataTime.substring(dataUnitIndex, dataUnitIndex + 8)
+  switch (dataUnitArray) {
+    case 'GMT+1000':
+      dataUnit = 'UTC+10'
+      break
+    case 'GMT-1000':
+      dataUnit = 'UTC-10'
+      break
+    case 'GMT+0000':
+      dataUnit = 'UTC+0'
+      break
+    default:
+      dataUnit = dataUnitArray ? dataUnitArray.replace(/0/g, '').replace('GMT', 'UTC') : '-'
+      break
+  }
+  dateNew = dateNew ?
+    moment(new Date(parseInt(dateNew))).format('YYYY-MM-DD HH:mm:ss') + ` (${dataUnit})` :
+    '-'
+  return dateNew
+}
+
 export default {
   sendRequest,
   timeout,
@@ -180,5 +208,6 @@ export default {
   Init,
   web3Init,
   hiddAddress,
-  providerInit
+  providerInit,
+  momentFun
 }

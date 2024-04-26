@@ -1,46 +1,50 @@
 <template>
   <div class="pop-up flex-row" v-show="props.claimShow">
+    <!-- <div class="close" @click="closeHandle">
+            <el-icon>
+              <Close />
+            </el-icon>
+          </div> -->
     <div class="connect-area">
-      <div class="close" @click="closeHandle">
-        <el-icon>
-          <Close />
-        </el-icon>
-      </div>
       <div class="connect-wallet">
         <el-table :data="tableData" border style="width: 100%" max-height="250">
-          <el-table-column prop="campaign_name">
+          <el-table-column prop="claim_reward_list_credit_type">
             <template #header>
-              <div class="font-22 weight-5">campaign name</div>
+              <div class="font-20 weight-5">type</div>
             </template>
             <template #default="scope">
-              <div class="font-16">{{scope.row.campaign_name}}</div>
+              <div class="font-16">{{scope.row.claim_reward_list_credit_type}}</div>
             </template>
           </el-table-column>
-          <el-table-column prop="nft_image">
+          <el-table-column prop="claim_reward_list_quantity">
             <template #header>
-              <div class="font-22 weight-5">NFT image</div>
+              <div class="font-20 weight-5">quantity</div>
             </template>
             <template #default="scope">
-              <div class="font-16">{{scope.row.nft_image}}</div>
+              <div class="font-16">{{scope.row.claim_reward_list_quantity}}</div>
             </template>
           </el-table-column>
-          <el-table-column prop="amount">
+          <el-table-column prop="claim_reward_list_expiration_date" min-width="140">
             <template #header>
-              <div class="font-22 weight-5">Amount</div>
+              <div class="font-20 weight-5">expiration date</div>
             </template>
             <template #default="scope">
-              <div class="font-16">{{scope.row.amount}}</div>
+              <div class="font-16">{{system.$commonFun.momentFun(scope.row.claim_reward_list_expiration_date)}}</div>
             </template>
           </el-table-column>
-          <el-table-column prop="wallet_address">
+          <el-table-column prop="claim_reward_list_status">
             <template #header>
-              <div class="font-22 weight-5">wallet address</div>
+              <div class="font-20 weight-5">status</div>
             </template>
             <template #default="scope">
-              <div class="font-16">{{scope.row.wallet_address}}</div>
+              <div class="font-16">{{scope.row.claim_reward_list_status}}</div>
             </template>
           </el-table-column>
         </el-table>
+        <p class="tip font-18">You can visit OpenSea to verify if you received</p>
+        <div class="flex-row center button font-16 weight-6">
+          <span @click="closeHandle">CANCEL</span>
+        </div>
       </div>
     </div>
   </div>
@@ -165,7 +169,9 @@ export default defineComponent({
       }
     }
     .connect-wallet {
-      padding: 30px 0 15px;
+      padding: 28px 25px;
+      background-color: #30333d;
+      border-radius: 20px;
       @media screen and (max-width: 768px) {
         padding: 60px 0 30px;
       }
@@ -173,8 +179,9 @@ export default defineComponent({
         padding: 90px 0 45px;
       }
       .el-table {
+        background-color: #30333d;
         font-family: inherit;
-        border-radius: 15px;
+        border-radius: 10px;
         tr {
           th,
           td {
@@ -183,7 +190,8 @@ export default defineComponent({
             font-weight: normal;
             line-height: 1;
             color: @white-color;
-            border-color: rgba(206, 207, 209, 0.2);
+            border-color: #676971;
+            text-align: center;
             .cell {
               padding: 0;
               line-height: 1;
@@ -205,6 +213,21 @@ export default defineComponent({
       .el-table__border-left-patch {
         // display: none;
         background-color: rgba(206, 207, 209, 0.1);
+      }
+      .tip {
+        padding: 10px 0;
+        color: #898989;
+      }
+      .button {
+        span {
+          padding: 6px 20px;
+          margin: 0 10px;
+          background-color: #6d6d6d;
+          color: #fff;
+          border: 1px solid #949599;
+          border-radius: 15px;
+          cursor: pointer;
+        }
       }
     }
   }
