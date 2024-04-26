@@ -95,19 +95,19 @@
         "type": "function"
     },
     {
-        "inputs": [{
-            "internalType": "address",
-            "name": "claimer",
-            "type": "address"
-        }],
-        "name": "claimAMA",
+        "inputs": [],
+        "name": "claimGalxe",
         "outputs": [],
         "stateMutability": "nonpayable",
         "type": "function"
     },
     {
-        "inputs": [],
-        "name": "claimGalxe",
+        "inputs": [{
+            "internalType": "uint256",
+            "name": "id",
+            "type": "uint256"
+        }],
+        "name": "claimId",
         "outputs": [],
         "stateMutability": "nonpayable",
         "type": "function"
@@ -121,17 +121,6 @@
     },
     {
         "inputs": [],
-        "name": "claimOG",
-        "outputs": [],
-        "stateMutability": "nonpayable",
-        "type": "function"
-    },
-    {
-        "inputs": [{
-            "internalType": "address",
-            "name": "claimer",
-            "type": "address"
-        }],
         "name": "claimOG",
         "outputs": [],
         "stateMutability": "nonpayable",
