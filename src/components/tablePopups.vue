@@ -7,7 +7,15 @@
           </div> -->
     <div class="connect-area">
       <div class="connect-wallet">
-        <el-table :data="tableData" border style="width: 100%" max-height="250">
+        <el-table :data="tableData" border style="width: 100%" max-height="350">
+          <el-table-column prop="claim_reward_list_event_name" min-width="120">
+            <template #header>
+              <div class="font-20 weight-5">event name</div>
+            </template>
+            <template #default="scope">
+              <div class="font-16">{{scope.row.claim_reward_list_event_name}}</div>
+            </template>
+          </el-table-column>
           <el-table-column prop="claim_reward_list_credit_type">
             <template #header>
               <div class="font-20 weight-5">type</div>
@@ -22,6 +30,14 @@
             </template>
             <template #default="scope">
               <div class="font-16">{{scope.row.claim_reward_list_quantity}}</div>
+            </template>
+          </el-table-column>
+          <el-table-column prop="claim_reward_list_event_date" min-width="140">
+            <template #header>
+              <div class="font-20 weight-5">event Date</div>
+            </template>
+            <template #default="scope">
+              <div class="font-16">{{system.$commonFun.momentFun(scope.row.claim_reward_list_event_date)}}</div>
             </template>
           </el-table-column>
           <el-table-column prop="claim_reward_list_expiration_date" min-width="140">
@@ -185,13 +201,14 @@ export default defineComponent({
         tr {
           th,
           td {
-            padding: 17px 40px;
+            padding: 12px 4px;
             font-family: inherit;
             font-weight: normal;
             line-height: 1;
             color: @white-color;
             border-color: #676971;
             text-align: center;
+            word-break: break-word;
             .cell {
               padding: 0;
               line-height: 1;
