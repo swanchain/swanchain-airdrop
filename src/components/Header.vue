@@ -64,7 +64,8 @@ export default defineComponent({
       if (typeof window.ethereum === 'undefined') return
       system.$commonFun.providerInit.on('chainChanged', async function (accounts) {
         if (!prevType.value) return false
-        store.dispatch('setMetaAddress', '')
+        const chainId = await system.$commonFun.web3Init.eth.net.getId()
+        if (chainId !== Number(process.env.VUE_APP_CHAINID)) store.dispatch('setMetaAddress', '')
       })
     }
     onMounted(() => fn())

@@ -105,12 +105,14 @@ export default defineComponent({
       if (!time) return false
       system.$commonFun.Init(async (addr, chain) => {
         // console.log(addr, chain)
-        if (chain) claimMethod()
+        closeHandle()
+        active.value = ''
+        // if (chain) claimMethod()
       })
     }
 
     async function claimMethod () {
-      let gasLimit,tx
+      let gasLimit, tx
       showLoading()
       try {
         console.log(props.claimType)
@@ -138,22 +140,22 @@ export default defineComponent({
               .on('error', () => hideLoading())
             break;
           case 'SAO':
-             gasLimit = await claimContract.methods
+            gasLimit = await claimContract.methods
               .claim()
               .estimateGas({ from: metaAddress.value })
 
-             tx = await claimContract.methods
+            tx = await claimContract.methods
               .claim()
               .send({ from: metaAddress.value, gasLimit: gasLimit })
               .on('transactionHash', (transactionHash) => txHashMethod(transactionHash))
               .on('error', () => hideLoading())
             break;
           case 'AMA':
-             gasLimit = await claimContract.methods
+            gasLimit = await claimContract.methods
               .claimAMA()
               .estimateGas({ from: metaAddress.value })
 
-             tx = await claimContract.methods
+            tx = await claimContract.methods
               .claimAMA()
               .send({ from: metaAddress.value, gasLimit: gasLimit })
               .on('transactionHash', (transactionHash) => txHashMethod(transactionHash))
@@ -161,11 +163,11 @@ export default defineComponent({
             break;
           case 'kol':
             gasLimit = await claimContract.methods
-              .claim()
+              .claimKOL()
               .estimateGas({ from: metaAddress.value })
 
             tx = await claimContract.methods
-              .claim()
+              .claimKOL()
               .send({ from: metaAddress.value, gasLimit: gasLimit })
               .on('transactionHash', (transactionHash) => txHashMethod(transactionHash))
               .on('error', () => hideLoading())

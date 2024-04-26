@@ -95,6 +95,17 @@
         "type": "function"
     },
     {
+        "inputs": [{
+            "internalType": "address",
+            "name": "claimer",
+            "type": "address"
+        }],
+        "name": "claimAMA",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+    },
+    {
         "inputs": [],
         "name": "claimGalxe",
         "outputs": [],
@@ -103,6 +114,24 @@
     },
     {
         "inputs": [],
+        "name": "claimKOL",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+    },
+    {
+        "inputs": [],
+        "name": "claimOG",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+    },
+    {
+        "inputs": [{
+            "internalType": "address",
+            "name": "claimer",
+            "type": "address"
+        }],
         "name": "claimOG",
         "outputs": [],
         "stateMutability": "nonpayable",
