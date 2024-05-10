@@ -81,6 +81,50 @@
         "type": "event"
     },
     {
+        "inputs": [{
+                "internalType": "address[]",
+                "name": "claimers",
+                "type": "address[]"
+            },
+            {
+                "internalType": "uint256[]",
+                "name": "ids",
+                "type": "uint256[]"
+            },
+            {
+                "internalType": "uint256[]",
+                "name": "quantities",
+                "type": "uint256[]"
+            }
+        ],
+        "name": "batchSetSingleClaim",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+    },
+    {
+        "inputs": [{
+            "internalType": "address[]",
+            "name": "claimers",
+            "type": "address[]"
+        }],
+        "name": "batchSetSingleClaim",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+    },
+    {
+        "inputs": [{
+            "internalType": "address[]",
+            "name": "claimers",
+            "type": "address[]"
+        }],
+        "name": "batchUnsetSingleClaim",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+    },
+    {
         "inputs": [],
         "name": "claim",
         "outputs": [],
@@ -90,6 +134,24 @@
     {
         "inputs": [],
         "name": "claimAMA",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+    },
+    {
+        "inputs": [{
+            "internalType": "address",
+            "name": "claimer",
+            "type": "address"
+        }],
+        "name": "claimAMA",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+    },
+    {
+        "inputs": [],
+        "name": "claimContributionReward",
         "outputs": [],
         "stateMutability": "nonpayable",
         "type": "function"
@@ -122,6 +184,31 @@
     {
         "inputs": [],
         "name": "claimOG",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+    },
+    {
+        "inputs": [{
+            "internalType": "address",
+            "name": "claimer",
+            "type": "address"
+        }],
+        "name": "claimOG",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+    },
+    {
+        "inputs": [],
+        "name": "claimRegional",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+    },
+    {
+        "inputs": [],
+        "name": "claimUBI",
         "outputs": [],
         "stateMutability": "nonpayable",
         "type": "function"

@@ -115,7 +115,6 @@ export default defineComponent({
       let gasLimit, tx
       showLoading()
       try {
-        console.log(props.claimType)
         switch (props.claimType) {
           case 'Zealy':
             gasLimit = await claimContract.methods
@@ -172,11 +171,45 @@ export default defineComponent({
               .on('transactionHash', (transactionHash) => txHashMethod(transactionHash))
               .on('error', () => hideLoading())
             break;
+          case 'UBI':
+            gasLimit = await claimContract.methods
+              .claimUBI()
+              .estimateGas({ from: metaAddress.value })
+
+            tx = await claimContract.methods
+              .claimUBI()
+              .send({ from: metaAddress.value, gasLimit: gasLimit })
+              .on('transactionHash', (transactionHash) => txHashMethod(transactionHash))
+              .on('error', () => hideLoading())
+            break;
+          case 'Contribution':
+            gasLimit = await claimContract.methods
+              .claimContributionReward()
+              .estimateGas({ from: metaAddress.value })
+
+            tx = await claimContract.methods
+              .claimContributionReward()
+              .send({ from: metaAddress.value, gasLimit: gasLimit })
+              .on('transactionHash', (transactionHash) => txHashMethod(transactionHash))
+              .on('error', () => hideLoading())
+            break;
+          case 'Regional':
+            gasLimit = await claimContract.methods
+              .claimRegional()
+              .estimateGas({ from: metaAddress.value })
+
+            tx = await claimContract.methods
+              .claimRegional()
+              .send({ from: metaAddress.value, gasLimit: gasLimit })
+              .on('transactionHash', (transactionHash) => txHashMethod(transactionHash))
+              .on('error', () => hideLoading())
+            break;
         }
       } catch (err) {
-        console.log('err', err)
-        if (err && err.message) system.$commonFun.messageTip('error', err.message)
-        active.value = 'failed'
+        console.log('err', err, err.code)
+        if (err && err.code === 4001) closeHandle()
+        else if (err && err.message) system.$commonFun.messageTip('error', err.message)
+        active.value = err && err.code === 4001 ? '' : 'failed'
         hideLoading()
       }
     }

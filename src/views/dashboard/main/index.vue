@@ -80,6 +80,18 @@ export default defineComponent({
       {
         value: 'kol',
         label: 'SWAN saturn kol',
+      },
+      {
+        value: 'UBI',
+        label: 'CP UBI Rewards',
+      },
+      {
+        value: 'Contribution',
+        label: 'CP Contribution Rewards',
+      },
+      {
+        value: 'Regional',
+        label: 'Regional Computing Dao Pilot Rewards',
       }
     ])
 
