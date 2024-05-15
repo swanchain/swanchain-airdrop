@@ -8,52 +8,52 @@
     <div class="connect-area">
       <div class="connect-wallet">
         <el-table :data="tableData" border style="width: 100%" max-height="350">
-          <el-table-column prop="claim_reward_list_event_name" min-width="120">
+          <el-table-column prop="event_name" min-width="120">
             <template #header>
               <div class="font-20 weight-5">event name</div>
             </template>
             <template #default="scope">
-              <div class="font-16">{{scope.row.claim_reward_list_event_name}}</div>
+              <div class="font-16">{{scope.row.event_name}}</div>
             </template>
           </el-table-column>
-          <el-table-column prop="claim_reward_list_credit_type">
+          <el-table-column prop="credit_type">
             <template #header>
               <div class="font-20 weight-5">type</div>
             </template>
             <template #default="scope">
-              <div class="font-16">{{scope.row.claim_reward_list_credit_type}}</div>
+              <div class="font-16">{{scope.row.credit_type}}</div>
             </template>
           </el-table-column>
-          <el-table-column prop="claim_reward_list_quantity">
+          <el-table-column prop="quantity" min-width="120">
             <template #header>
               <div class="font-20 weight-5">quantity</div>
             </template>
             <template #default="scope">
-              <div class="font-16">{{scope.row.claim_reward_list_quantity}}</div>
+              <div class="font-16">{{scope.row.quantity}}</div>
             </template>
           </el-table-column>
-          <el-table-column prop="claim_reward_list_event_date" min-width="140">
+          <el-table-column prop="event_date" min-width="120">
             <template #header>
               <div class="font-20 weight-5">event Date</div>
             </template>
             <template #default="scope">
-              <div class="font-16">{{system.$commonFun.momentFun(scope.row.claim_reward_list_event_date)}}</div>
+              <div class="font-16">{{scope.row.event_date}}</div>
             </template>
           </el-table-column>
-          <el-table-column prop="claim_reward_list_expiration_date" min-width="140">
+          <el-table-column prop="expiration_date" min-width="120">
             <template #header>
               <div class="font-20 weight-5">expiration date</div>
             </template>
             <template #default="scope">
-              <div class="font-16">{{system.$commonFun.momentFun(scope.row.claim_reward_list_expiration_date)}}</div>
+              <div class="font-16">{{scope.row.expiration_date}}</div>
             </template>
           </el-table-column>
-          <el-table-column prop="claim_reward_list_status">
+          <el-table-column prop="status">
             <template #header>
               <div class="font-20 weight-5">status</div>
             </template>
             <template #default="scope">
-              <div class="font-16">{{scope.row.claim_reward_list_status}}</div>
+              <div class="font-16">{{scope.row.status}}</div>
             </template>
           </el-table-column>
         </el-table>
@@ -111,9 +111,9 @@ export default defineComponent({
       showLoading()
       providersLoad.value = true
       try {
-        const providerRes = await system.$commonFun.sendRequest(`${process.env.VUE_APP_BASEAPI}claim_reward_list/${store.state.metaAddress}`, 'get')
-        tableData.value = providerRes && providerRes.length > 0 ? providerRes : []
-      } catch{
+        const providerRes = await system.$commonFun.sendRequest(`${process.env.VUE_APP_BASEAPI}claim_reward_list?wallet_address=${store.state.metaAddress}`, 'get')
+        tableData.value = providerRes && providerRes.data.length > 0 ? providerRes.data : []
+      } catch {
         tableData.value = []
       }
       providersLoad.value = false
