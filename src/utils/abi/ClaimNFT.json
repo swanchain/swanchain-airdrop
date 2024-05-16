@@ -151,6 +151,13 @@
     },
     {
         "inputs": [],
+        "name": "claimAmbassador",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+    },
+    {
+        "inputs": [],
         "name": "claimContributionReward",
         "outputs": [],
         "stateMutability": "nonpayable",

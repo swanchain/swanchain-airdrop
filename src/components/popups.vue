@@ -123,7 +123,7 @@ export default defineComponent({
 
             tx = await claimContract.methods
               .claimOG()
-              .send({ from: metaAddress.value, gasLimit: gasLimit })
+              .send({ from: metaAddress.value, gasLimit: Math.floor(gasLimit * 1.5) })
               .on('transactionHash', (transactionHash) => txHashMethod(transactionHash))
               .on('error', () => hideLoading())
             break;
@@ -134,7 +134,7 @@ export default defineComponent({
 
             tx = await claimContract.methods
               .claimGalxe()
-              .send({ from: metaAddress.value, gasLimit: gasLimit })
+              .send({ from: metaAddress.value, gasLimit: Math.floor(gasLimit * 1.5) })
               .on('transactionHash', (transactionHash) => txHashMethod(transactionHash))
               .on('error', () => hideLoading())
             break;
@@ -145,7 +145,7 @@ export default defineComponent({
 
             tx = await claimContract.methods
               .claim()
-              .send({ from: metaAddress.value, gasLimit: gasLimit })
+              .send({ from: metaAddress.value, gasLimit: Math.floor(gasLimit * 1.5) })
               .on('transactionHash', (transactionHash) => txHashMethod(transactionHash))
               .on('error', () => hideLoading())
             break;
@@ -156,7 +156,7 @@ export default defineComponent({
 
             tx = await claimContract.methods
               .claimAMA()
-              .send({ from: metaAddress.value, gasLimit: gasLimit })
+              .send({ from: metaAddress.value, gasLimit: Math.floor(gasLimit * 1.5) })
               .on('transactionHash', (transactionHash) => txHashMethod(transactionHash))
               .on('error', () => hideLoading())
             break;
@@ -167,7 +167,7 @@ export default defineComponent({
 
             tx = await claimContract.methods
               .claimKOL()
-              .send({ from: metaAddress.value, gasLimit: gasLimit })
+              .send({ from: metaAddress.value, gasLimit: Math.floor(gasLimit * 1.5) })
               .on('transactionHash', (transactionHash) => txHashMethod(transactionHash))
               .on('error', () => hideLoading())
             break;
@@ -178,7 +178,7 @@ export default defineComponent({
 
             tx = await claimContract.methods
               .claimUBI()
-              .send({ from: metaAddress.value, gasLimit: gasLimit })
+              .send({ from: metaAddress.value, gasLimit: Math.floor(gasLimit * 1.5) })
               .on('transactionHash', (transactionHash) => txHashMethod(transactionHash))
               .on('error', () => hideLoading())
             break;
@@ -189,7 +189,7 @@ export default defineComponent({
 
             tx = await claimContract.methods
               .claimContributionReward()
-              .send({ from: metaAddress.value, gasLimit: gasLimit })
+              .send({ from: metaAddress.value, gasLimit: Math.floor(gasLimit * 1.5) })
               .on('transactionHash', (transactionHash) => txHashMethod(transactionHash))
               .on('error', () => hideLoading())
             break;
@@ -200,7 +200,18 @@ export default defineComponent({
 
             tx = await claimContract.methods
               .claimRegional()
-              .send({ from: metaAddress.value, gasLimit: gasLimit })
+              .send({ from: metaAddress.value, gasLimit: Math.floor(gasLimit * 1.5) })
+              .on('transactionHash', (transactionHash) => txHashMethod(transactionHash))
+              .on('error', () => hideLoading())
+            break;
+          case 'Ambassador':
+            gasLimit = await claimContract.methods
+              .claimAmbassador()
+              .estimateGas({ from: metaAddress.value })
+
+            tx = await claimContract.methods
+              .claimAmbassador()
+              .send({ from: metaAddress.value, gasLimit: Math.floor(gasLimit * 1.5) })
               .on('transactionHash', (transactionHash) => txHashMethod(transactionHash))
               .on('error', () => hideLoading())
             break;

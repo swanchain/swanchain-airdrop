@@ -92,6 +92,10 @@ export default defineComponent({
       {
         value: 'Regional',
         label: 'Regional Computing Dao Pilot Rewards',
+      },
+      {
+        value: 'Ambassador',
+        label: 'Ambassador Stage 1',
       }
     ])
 

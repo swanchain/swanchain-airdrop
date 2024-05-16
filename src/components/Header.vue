@@ -67,6 +67,12 @@ export default defineComponent({
         const chainId = await system.$commonFun.web3Init.eth.net.getId()
         if (chainId !== Number(process.env.VUE_APP_CHAINID)) store.dispatch('setMetaAddress', '')
       })
+      system.$commonFun.providerInit.on('accountsChanged', function (account) {
+        // console.log('account header:', account[0], !(account[0]));  //Once the account is switched, it will be executed here
+        if (!prevType.value) return false
+        store.dispatch('setMetaAddress', '')
+        window.location.reload()
+      })
     }
     onMounted(() => fn())
     watch(route, (to, from) => { })
