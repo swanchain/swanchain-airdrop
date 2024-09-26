@@ -56,6 +56,11 @@
               <div class="font-16">{{scope.row.status}}</div>
             </template>
           </el-table-column>
+          <el-table-column width="90">
+            <template #default="scope">
+              <div class="font-16 claim-btn" @click="claimAirdrop">claim</div>
+            </template>
+          </el-table-column>
         </el-table>
         <p class="tip font-18">You can visit OpenSea to verify if you received</p>
         <div class="flex-row center button font-16 weight-6">
@@ -87,6 +92,7 @@ import {
 } from '@element-plus/icons-vue'
 import { ElIcon, ElTable, ElTableColumn } from "element-plus"
 import { showLoading, hideLoading } from '@/plugins/loading'
+import airdropABI from '@/utils/abi/Airdrop.json'
 export default defineComponent({
   name: 'Popup',
   components: {
@@ -102,22 +108,47 @@ export default defineComponent({
     const route = useRoute()
     const router = useRouter()
     const tableData = ref([])
-    const providersLoad = ref(false)
+    const airdropData = reactive({
+      amount: 0,
+      signature: ''
+    })
 
     function closeHandle () {
       context.emit('hardClose', false)
     }
     async function init () {
       showLoading()
-      providersLoad.value = true
       try {
         const providerRes = await system.$commonFun.sendRequest(`${process.env.VUE_APP_BASEAPI}claim_reward_list?wallet_address=${store.state.metaAddress}`, 'get')
         tableData.value = providerRes && providerRes.data.length > 0 ? providerRes.data : []
       } catch {
         tableData.value = []
       }
-      providersLoad.value = false
       hideLoading()
+    }
+    async function claimAirdrop() {
+      showLoading()
+      try {
+        const airdropRes = await system.$commonFun.sendRequest(`${process.env.VUE_APP_BASELOGINAPI}signature/airdrop`, 'get')
+        if (airdropRes?.status !== 'success') return false
+        airdropData.amount = airdropRes?.data?.amount ?? 0
+        airdropData.signature = airdropRes?.data?.signature ?? ''
+
+        const amount = system.$commonFun.web3Init.utils.toWei(String(airdropData.amount), 'ether')
+        const claimContract = new system.$commonFun.web3Init.eth.Contract(airdropABI, process.env.VUE_APP_ARIDROP_CONTACT_ADDRESS)
+        const claimFunction = claimContract.methods.claim(amount, airdropData.signature)
+        const gasLimit = await claimFunction.estimateGas({ from: store.state.metaAddress })
+        const tx = await claimFunction.send({ from: store.state.metaAddress, gasLimit: gasLimit })
+          .on('transactionHash', (transactionHash) => {
+            console.log(transactionHash)
+          })
+      } catch (err) {
+        console.log('errerr:', err, err.message)
+        const errMessage = err?.message ?? ''
+        if (errMessage) system.$commonFun.messageTip('error', errMessage)
+      } finally {
+        hideLoading()
+      }
     }
     onMounted(() => {
       init()
@@ -127,8 +158,7 @@ export default defineComponent({
       bodyWidth,
       props,
       tableData,
-      providersLoad,
-      closeHandle
+      closeHandle, claimAirdrop
     }
   }
 })
@@ -212,6 +242,18 @@ export default defineComponent({
             .cell {
               padding: 0;
               line-height: 1;
+              .claim-btn {
+                padding: 0.04rem 0;
+                background-color: #5580e9;
+                border-radius: 0.08rem;
+                color: #fff;
+                cursor: pointer;
+                transition: all 0.2s;
+                &:hover {
+                  background-color: #fff;
+                  color: #5580e9;
+                }
+              }
             }
           }
           th {

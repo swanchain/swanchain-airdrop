@@ -10,7 +10,8 @@
         <div class="title font-24 weight-6">Connect Wallet</div>
         <div class="metamask flex-row" @click="isLogin">
           <img :src="metaLogo" alt="" class="image" />
-          <div class="font-18">MetaMask</div>
+          <!-- <div class="font-18">MetaMask</div> -->
+          <web3-modal />
         </div>
         <!-- <div class="agree text-center font-12">
           By connecting your wallet, you agree to our<br />
@@ -41,6 +42,7 @@
 </template>
 
 <script>
+import web3Modal from "./web3Modal"
 import {
   defineComponent,
   computed,
@@ -65,7 +67,7 @@ import claimABI from '@/utils/abi/ClaimNFT.json'
 export default defineComponent({
   name: 'Popup',
   components: {
-    CircleClose, ElIcon
+    CircleClose, ElIcon, web3Modal
   },
   props: {
     claimShow: { type: Boolean, default: false },
@@ -85,7 +87,6 @@ export default defineComponent({
     const claimLoad = ref(false)
     const hash = ref('')
     const claimAddress = process.env.VUE_APP_CONTACT_ADDRESS
-    const claimContract = new system.$commonFun.web3Init.eth.Contract(claimABI, claimAddress)
 
     function closeHandle () {
       context.emit('hardClose', false)
@@ -116,6 +117,7 @@ export default defineComponent({
       showLoading()
       try {
         console.log(props.claimType)
+        const claimContract = new system.$commonFun.web3Init.eth.Contract(claimABI, claimAddress)
         switch (props.claimType) {
           case 'Zealy':
             gasLimit = await claimContract.methods
@@ -182,7 +184,7 @@ export default defineComponent({
     }
     function txHashMethod (transactionHash) {
       console.log('transactionHash:', transactionHash)
-      hash.value = `${process.env.VUE_APP_POLYGONBLOCKURL}/tx/${transactionHash}`
+      hash.value = `${process.env.VUE_APP_BLOCKURL}/tx/${transactionHash}`
       active.value = 'success'
       hideLoading()
     }
@@ -318,7 +320,7 @@ export default defineComponent({
         .image {
           width: 38px;
           height: auto;
-          margin: -2px 20px 0 0;
+          margin: -2px 4px 0 0;
           @media screen and (max-width: 1260px) {
             width: 42px;
           }
@@ -333,11 +335,11 @@ export default defineComponent({
           }
           @media screen and (max-width: 600px) {
             width: 75px;
-            margin: -4px 40px 0 0;
+            margin: -4px 8px 0 0;
           }
           @media screen and (max-width: 540px) {
             width: 85px;
-            margin: -10px 40px 0 0;
+            margin: -10px 8px 0 0;
           }
         }
       }

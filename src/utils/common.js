@@ -3,10 +3,12 @@ import axios from 'axios'
 import {
   ElMessage
 } from 'element-plus'
+import { getAccount, signMessage, disconnect } from '@wagmi/core'
+import config from './config.js'
 
 async function sendRequest(apilink, type, jsonObject, api_token) {
   // axios.defaults.timeout = 60000
-  // axios.defaults.headers.common['Authorization'] = `Bearer ${api_token?api_token:store.state.accessToken}`
+  axios.defaults.headers.common['Authorization'] = `Bearer ${api_token ? api_token : store.state.accessToken}`
   try {
     let response
     switch (type) {
@@ -92,57 +94,81 @@ async function Init(callback) {
     goLink('https://metamask.io/download.html')
     alert("Consider installing MetaMask!");
   } else {
-    providerInit
-      .request({
-        method: 'eth_requestAccounts'
-      })
-      .then(async (accounts) => {
-        if (!accounts) {
-          callback('')
-          return false
-        }
-
-        const chainNet = await walletChain()
-        const chainId = await web3Init.eth.net.getId()
-        await web3Init.eth.getAccounts().then(async webAccounts => {
-            store.dispatch('setMetaAddress', webAccounts[0])
-            callback(webAccounts[0], chainId === Number(process.env.VUE_APP_CHAINID))
-          })
-          .catch(async (error) => {
-            store.dispatch('setMetaAddress', accounts[0])
-            callback(accounts[0], chainId === Number(process.env.VUE_APP_CHAINID))
-          })
-      })
-      .catch((error) => {
-        if (error === "User rejected provider access") {} else {
-          alert("Please unlock MetaMask and switch to the correct network.");
-          return false
-        }
-        console.error(
-          `Error fetching accounts: ${error.message}.
-        Code: ${error.code}. Data: ${error.data}`
-        );
-      });
+    const account = getAccount(config.config)
+    callback(account?.address)
   }
 }
 
-async function walletChain(chainId) {
+async function login(config) {
+  if (!store.state.metaAddress || store.state.metaAddress === undefined) {
+    const account = getAccount(config.config)
+    store.dispatch('setMetaAddress', account?.address)
+  }
+  const time = await throttle()
+  console.log('passed metamask wait')
+  if (!time) return [false, '']
+  console.log('before sign')
+  const [signature, signErr] = await sign(config)
+  if (signature) store.dispatch('setSignature', signature)
+  console.log('after sign', signature)
+  console.log(store.state.signature)
+  if (!signature) return [false, signErr]
+  const token = await performSignin(signature)
+  return [!!token, '']
+}
+
+let lastTime = 0
+async function throttle() {
+  // Prevent multiple signatures
+  let now = new Date().valueOf();
+  if (lastTime > 0 && (now - lastTime) <= 2000) return false
+  lastTime = now
+  return true
+}
+
+async function sign() {
+  const rightnow = (Date.now() / 1000).toFixed(0)
+  const sortanow = rightnow - (rightnow % 600)
+  const local = process.env.VUE_APP_DOMAINNAME_MAINNET
+  const buff = Buffer.from("Signing in to " + local + " at " + sortanow, 'utf-8')
+  let signature = null
+  const signErr = ''
   try {
-    await providerInit.request({
-      method: 'wallet_addEthereumChain',
-      params: [{
-        chainId: web3Init.utils.numberToHex(137),
-        chainName: 'Polygon Mainnet',
-        nativeCurrency: {
-          name: 'MATIC',
-          symbol: 'MATIC', // 2-6 characters long
-          decimals: 18
-        },
-        rpcUrls: [process.env.VUE_APP_POLYGONRPCURL],
-        blockExplorerUrls: [process.env.VUE_APP_POLYGONBLOCKURL]
-      }]
-    })
-  } catch {}
+    // const signatureMessage = await signMessage(config.config, { message: buff.toString('hex') })
+    signature = await signMessage(config.config, { message: "Signing in to " + local + " at " + sortanow })
+    return [signature, signErr]
+  } catch {
+    return [signature, 'error']
+  }
+}
+
+async function performSignin(sig) {
+  try {
+    const reqOpts = [store.state.metaAddress, sig]
+    const response = await sendRequest(`${process.env.VUE_APP_BASELOGINAPI}login`, 'post', reqOpts)
+    if (response && response.access_token) {
+      store.dispatch('setAccessApiKey', response.api_token || '')
+      store.dispatch('setAccessToken', response.access_token)
+      return true
+    } else signOutFun()
+    messageTip('error', response ? response.message : 'Fail')
+    return null
+  } catch (err) {
+    console.log('login err:', err)
+    messageTip('error', 'Fail')
+    signOutFun()
+    return null
+  }
+}
+
+async function signOutFun(status) {
+  if (store.state.accessToken || status) {
+    const account = getAccount(config.config)
+    if (account?.address) await disconnect(config.config)
+    store.dispatch('setMetaAddress', '')
+  }
+  store.dispatch('setAccessToken', '')
+  store.dispatch('setSignature', '')
 }
 
 let web3Init
@@ -209,5 +235,7 @@ export default {
   web3Init,
   hiddAddress,
   providerInit,
-  momentFun
+  momentFun,
+  login,
+  signOutFun
 }

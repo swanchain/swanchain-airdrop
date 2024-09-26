@@ -5,10 +5,11 @@
       <el-button v-if="metaAddress === ''" round @click="clickQuery">Log in</el-button>
       <div v-else class="wallet flex-row">
         <div class="address flex-row font-20">
-          <img :src="metaLogo" alt="" class="image" />
-          <div class="font-14">{{system.$commonFun.hiddAddress(metaAddress)}}</div>
+          <!-- <img :src="metaLogo" alt="" class="image" />
+          <div class="font-14">{{system.$commonFun.hiddAddress(metaAddress)}}</div> -->
+          <web3-modal />
         </div>
-        <div class="connect flex-row font-14">
+        <div class="connect flex-row font-14" v-if="signature">
           <el-dropdown @command="handleSelect" class="sign-popper" popper-class="menu-popper" placement="bottom" :teleported="true">
             <div class="el-dropdown-link flex-row">
               <span></span>
@@ -28,17 +29,19 @@
   </section>
 </template>
 <script>
+import web3Modal from "./web3Modal"
 import { defineComponent, computed, onMounted, onBeforeUnmount, nextTick, watch, ref, reactive, getCurrentInstance } from 'vue'
 import { useStore } from "vuex"
 import { useRouter, useRoute } from 'vue-router'
 // import {} from '@element-plus/icons-vue'
 import { ElButton, ElDropdown, ElDropdownItem, ElDropdownMenu } from "element-plus"
 export default defineComponent({
-  components: { ElButton, ElDropdown, ElDropdownItem, ElDropdownMenu },
+  components: { ElButton, ElDropdown, ElDropdownItem, ElDropdownMenu, web3Modal },
   setup (props, context) {
     const store = useStore()
     const bodyWidth = ref(document.body.clientWidth < 992)
     const metaAddress = computed(() => (store.state.metaAddress))
+    const signature = computed(() => (store.state.signature))
     const system = getCurrentInstance().appContext.config.globalProperties
     const route = useRoute()
     const router = useRouter()
@@ -50,7 +53,7 @@ export default defineComponent({
       // console.log(key, keyPath) //  
       switch (key) {
         case 'logout':
-          store.dispatch('setMetaAddress', '')
+          system.$commonFun.signOutFun('disconnect')
           break;
       }
     }
@@ -81,6 +84,7 @@ export default defineComponent({
       swanLogo,
       metaLogo,
       metaAddress,
+      signature,
       clickQuery, handleSelect
     }
   }
@@ -235,7 +239,7 @@ export default defineComponent({
         .el-dropdown {
           .el-dropdown-link {
             padding: 9px 22px 9px 15px;
-            margin: 0 0 0 24px;
+            margin: 0 0 0 6px;
             background-color: #717172;
             border-radius: 50px;
             color: @white-color;

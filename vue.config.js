@@ -32,6 +32,8 @@ module.exports = {
 
   productionSourceMap: false,
 
+  transpileDependencies: true,
+
   css: {
     loaderOptions: {
       less: {
