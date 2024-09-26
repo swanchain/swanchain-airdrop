@@ -15,16 +15,10 @@ RUN apk add --update \
 WORKDIR /app
 
 # copy both 'package.json'
-COPY package.json yarn.lock./
+COPY package.json yarn.lock ./
 
-# remove node_modules if exists
-RUN rm -rf node_modules
-
-# remove package-lock.json if exists
-RUN rm -rf package-lock.json
-
-# clean npm cache
-RUN npm cache clean --force
+# Clean npm cache and remove existing node_modules and package-lock.json
+RUN rm -rf node_modules package-lock.json && npm cache clean --force
 
 # install project dependencies
 RUN yarn install
