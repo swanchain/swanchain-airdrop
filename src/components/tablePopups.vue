@@ -37,14 +37,6 @@
               <div class="font-16">{{ scope.row.quantity }}</div>
             </template>
           </el-table-column>
-          <el-table-column prop="event_date" min-width="120">
-            <template #header>
-              <div class="font-20 weight-5">event Date</div>
-            </template>
-            <template #default="scope">
-              <div class="font-16">{{ scope.row.event_date }}</div>
-            </template>
-          </el-table-column>
           <el-table-column prop="expiration_date" min-width="120">
             <template #header>
               <div class="font-20 weight-5">expiration date</div>
@@ -136,7 +128,7 @@ export default defineComponent({
           event_name: 'TGE Airdrop',
           credit_type: '$SWAN',
           quantity: airdropRes.data?.amount,
-          expiration_date: airdropExpiryDate.toString()
+          expiration_date: airdropExpiryDate.toLocaleString()
         }] : []
 
       } catch(e) {
