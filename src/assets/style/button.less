@@ -1,0 +1,98 @@
+.pointer {
+  cursor: pointer;
+}
+
+.link {
+  .pointer();
+  color: var(--color-primary);
+  border-bottom: 0.02rem solid var(--color-primary);
+}
+
+.disabled {
+  cursor: not-allowed;
+}
+
+.btn-default {
+  cursor: pointer;
+  text-align: center;
+  border-radius: 1rem;
+  width: fit-content;
+  transition: all 0.2s;
+}
+
+.btn {
+  .btn-default();
+  background-color: var(--color-light);
+  color: var(--color-dark);
+  border: 0.02rem solid var(--color-light);
+  &.btn-light{
+    background-color: var(--color-light);
+    color: var(--color-dark);
+    border: 0.02rem solid var(--color-light);
+    &:hover {
+      background-color: transparent;
+      color: var(--color-light);
+    }
+  }
+  &.btn-dark{
+    background-color: var(--color-dark);
+    color: var(--color-light);
+    border: 0.02rem solid var(--color-dark);
+    &:hover {
+      background-color: transparent;
+    }
+  }
+  &.btn-disabled{
+    background-color: var(--color-dark);
+    color: var(--color-light);
+    border: 0.02rem solid var(--color-dark);
+    cursor: no-drop;
+    opacity: .6;
+    &:hover {
+      background-color: var(--color-dark);
+      color: var(--color-light);
+      border: 0.02rem solid var(--color-dark);
+      opacity: 0.6 !important;
+    }
+  }
+  &:hover {
+    background-color: transparent;
+    color: var(--color-light);
+    border-color: var(--color-light);
+    opacity: 1 !important;
+  }
+}
+
+.btn.active {
+  .btn-primary();
+  box-shadow: 0 0.16rem 0.32rem 0 rgba(64, 76, 251, 0.25);
+}
+
+.btn-primary {
+  .btn-default();
+  border: 0.01rem solid var(--color-primary);
+  background-color: var(--color-primary);
+  color: var(--color-light);
+}
+.btn-primary:hover {
+  border: 0.01rem solid var(--color-light);
+  background-color: var(--color-light);
+  color: var(--color-primary);
+  box-shadow: 0 0.16rem 0.32rem 0 rgba(64, 76, 251, 0.25);
+}
+.btn-primary.active {
+  .btn();
+  box-shadow: 0 0.16rem 0.32rem 0 rgba(64, 76, 251, 0.25);
+}
+.btn-plain {
+  .btn-default();
+  border: 0.01rem solid var(--color-light-grey);
+  background-color: var(--color-light);
+  color: var(--color-primary);
+}
+
+.btn-plain:hover,
+.btn-plain.active {
+  .btn-primary.active();
+  border-color: var(--color-primary);
+}
