@@ -7,13 +7,18 @@
           </div> -->
     <div class="connect-area">
       <div class="connect-wallet">
-        <el-table :data="tableData" border style="width: 100%" max-height="350">
+        <el-table
+          :data="tableData"
+          border
+          style="width: 100%;"
+          max-height="350"
+        >
           <el-table-column prop="event_name" min-width="120">
             <template #header>
               <div class="font-20 weight-5">event name</div>
             </template>
             <template #default="scope">
-              <div class="font-16">{{scope.row.event_name}}</div>
+              <div class="font-16">{{ scope.row.event_name }}</div>
             </template>
           </el-table-column>
           <el-table-column prop="credit_type">
@@ -21,7 +26,7 @@
               <div class="font-20 weight-5">type</div>
             </template>
             <template #default="scope">
-              <div class="font-16">{{scope.row.credit_type}}</div>
+              <div class="font-16">{{ scope.row.credit_type }}</div>
             </template>
           </el-table-column>
           <el-table-column prop="quantity" min-width="120">
@@ -29,15 +34,7 @@
               <div class="font-20 weight-5">quantity</div>
             </template>
             <template #default="scope">
-              <div class="font-16">{{scope.row.quantity}}</div>
-            </template>
-          </el-table-column>
-          <el-table-column prop="event_date" min-width="120">
-            <template #header>
-              <div class="font-20 weight-5">event Date</div>
-            </template>
-            <template #default="scope">
-              <div class="font-16">{{scope.row.event_date}}</div>
+              <div class="font-16">{{ scope.row.quantity }}</div>
             </template>
           </el-table-column>
           <el-table-column prop="expiration_date" min-width="120">
@@ -45,7 +42,7 @@
               <div class="font-20 weight-5">expiration date</div>
             </template>
             <template #default="scope">
-              <div class="font-16">{{scope.row.expiration_date}}</div>
+              <div class="font-16">{{ scope.row.expiration_date }}</div>
             </template>
           </el-table-column>
           <el-table-column prop="status">
@@ -53,7 +50,7 @@
               <div class="font-20 weight-5">status</div>
             </template>
             <template #default="scope">
-              <div class="font-16">{{scope.row.status}}</div>
+              <div class="font-16">{{ scope.row.status }}</div>
             </template>
           </el-table-column>
           <el-table-column width="90">
@@ -62,7 +59,7 @@
             </template>
           </el-table-column>
         </el-table>
-        <p class="tip font-18">You can visit OpenSea to verify if you received</p>
+        <!-- <p class="tip font-18">You can visit OpenSea to verify if you received</p> -->
         <div class="flex-row center button font-16 weight-6">
           <span @click="closeHandle">CANCEL</span>
         </div>
@@ -119,9 +116,23 @@ export default defineComponent({
     async function init () {
       showLoading()
       try {
-        const providerRes = await system.$commonFun.sendRequest(`${process.env.VUE_APP_BASEAPI}claim_reward_list?wallet_address=${store.state.metaAddress}`, 'get')
-        tableData.value = providerRes && providerRes.data.length > 0 ? providerRes.data : []
-      } catch {
+        // get expiry time from contract
+        const claimContract = new system.$commonFun.web3Init.eth.Contract(airdropABI, process.env.VUE_APP_ARIDROP_CONTACT_ADDRESS)
+        const airdropExpiry = await claimContract.methods.getExpiryTimestamp().call()
+        const airdropExpiryDate = new Date(airdropExpiry * 1000)
+
+        // get user's airdrop info
+        const airdropRes = await system.$commonFun.sendRequest(`${process.env.VUE_APP_BASELOGINAPI}signature/airdrop`, 'get')
+        console.log(airdropRes)
+        tableData.value = airdropRes ? [{
+          event_name: 'TGE Airdrop',
+          credit_type: '$SWAN',
+          quantity: airdropRes.data?.amount,
+          expiration_date: airdropExpiryDate.toLocaleString()
+        }] : []
+
+      } catch(e) {
+        console.log(e)
         tableData.value = []
       }
       hideLoading()
